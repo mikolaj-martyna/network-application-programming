@@ -4,18 +4,15 @@
 using namespace std;
 
 int main() {
-    // Ask user for file details
     string inputFileName;
     cout << "Please enter the input file name: ";
     cin >> inputFileName;
 
     string outputFileName = "lab1zad1.txt";
 
-    // Open the streams
     ifstream inputFile{inputFileName};
     ofstream outputFile{outputFileName, ios::out | ios::trunc | ios::binary};
 
-    // Check if streams opened successfully
     if (!inputFile) {
         cerr << "Error opening input file '" << inputFileName << "'" << endl;
 
@@ -40,7 +37,6 @@ int main() {
         return 1;
     }
 
-    // Copy the contents
     try {
         static constexpr int BUFFER_SIZE = 4096;
         char buffer[BUFFER_SIZE];
@@ -52,10 +48,10 @@ int main() {
         outputFile.write(buffer, inputFile.gcount());
     } catch (const exception& e) {
         cerr << "Error during file copy: " << e.what() << endl;
+
         return 1;
     }
 
-    // Close the streams
     inputFile.close();
     outputFile.close();
 

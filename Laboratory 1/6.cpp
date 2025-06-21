@@ -13,14 +13,12 @@ bool isIpV4(const string& ip) {
     string octet;
     bool invalid = false;
 
-    // Split on dot
     while (getline(iss, octet, '.')) {
         if (!octet.empty()) {
             octets.push_back(octet);
         }
     }
 
-    // Check if each octet is valid
     for (string& octet : octets) {
         for (const char& c : octet) {
             if (c < '0' || c > '9') {
@@ -38,12 +36,10 @@ bool isIpV4(const string& ip) {
 }
 
 int main() {
-    // Get ip or hostname
     string ipOrHostname;
     cout << "Enter ip address or hostname: ";
     cin >> ipOrHostname;
 
-    // Check whether ipv4 or hostname
     string ip = ipOrHostname;
     if (isIpV4(ipOrHostname)) {
         cout << "ipv4 given." << endl;
@@ -56,30 +52,27 @@ int main() {
     }
     cout << ip;
 
-    // Get port
     short port;
     cout << "Enter port number: ";
     cin >> port;
 
-    // Check if valid
     if (port < 0 || port > 65535) {
         cerr << "Invalid port number." << endl;
+
         return 1;
     }
 
-    // Create socket
     const int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
     if (clientSocket < 0) {
         cerr << "Failed to create socket." << endl;
+
         return 1;
     }
 
-    // Set up server address
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
 
-    // Convert ip to binary format
     if (inet_pton(AF_INET, ip.c_str(), &serverAddress.sin_addr) <= 0) {
         cerr << "Invalid ip address format." << endl;
         close(clientSocket);
@@ -87,7 +80,6 @@ int main() {
         return 1;
     }
 
-    // Connect to server
     if (connect(clientSocket, reinterpret_cast<sockaddr *>(&serverAddress), sizeof(serverAddress)) < 0) {
         cerr << "Connection failed." << endl;
         close(clientSocket);
